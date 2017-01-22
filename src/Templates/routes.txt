@@ -1,6 +1,6 @@
 <?php
 
-Route::group([], function()
+Route::group(['namespace' => {{namespace}}], function()
 {
 	Route::get('/{{variables}}', ['as' => '{{variables}}.index', 'uses' => '{{controller}}@index']);
     

@@ -87,7 +87,7 @@ class Generator extends Command
         $this->info($variables . ' views folder created!');
 
         $this->makeRoutesFolder();
-        $routesContent = $this->getRoutes($variables, $controller);
+        $routesContent = $this->getRoutes($variables, $controller, $namespace);
         $this->makeRoutes($variables, $routesContent);
 
         $this->info($variables . ' routes created!');
@@ -168,13 +168,13 @@ class Generator extends Command
     }
 
 
-    public function getRoutes($variables, $controller)
+    public function getRoutes($variables, $controller, $namespace)
     {
         $template = File::get($this->path('Templates/routes.txt'));
 
         return str_replace(
-            ['{{variables}}', '{{controller}}'], 
-            [$variables, $controller], $template
+            ['{{variables}}', '{{controller}}', '{{namespace}}'], 
+            [$variables, $controller, $namespace], $template
         );
     }
 
