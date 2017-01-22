@@ -1,0 +1,21 @@
+{
+    "name": "abdelilahlbardi/laragenerator",
+    "description": "DRY while building your Laravel projects.",
+    "type": "package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Abdelilah Lbardi",
+            "email": "lbardi.abdelilah@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "laracasts/generators": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "AbdelilahLbardi\\LaraGenerator\\": "src/"
+        }
+    }
+}

@@ -1,0 +1,21 @@
+<?php
+
+Route::group([], function()
+{
+	Route::get('/{{variables}}', ['as' => '{{variables}}.index', 'uses' => '{{controller}}@index']);
+    
+    Route::get('/{{variables}}/create', ['as' => '{{variables}}.create', 'uses' => '{{controller}}@create']);
+    
+    Route::post('/{{variables}}/store', ['as' => '{{variables}}.store', 'uses' => '{{controller}}@store']);
+    
+    Route::get('/{{variables}}/edit/{id}', ['as' => '{{variables}}.edit', 'uses' => '{{controller}}@edit']);
+    
+    Route::get('/{{variables}}/show/{id}', ['as' => '{{variables}}.show', 'uses' => '{{controller}}@show']);
+    
+    Route::put('/{{variables}}/update/{id}', ['as' => '{{variables}}.update', 'uses' => '{{controller}}@update']);
+    
+    Route::delete('/{{variables}}/delete/{id}', ['as' => '{{variables}}.delete', 'uses' => '{{controller}}@destroy']);
+
+}
+
+?>
