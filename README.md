@@ -1,5 +1,7 @@
 # Laragenerator
 
+## Laravel 5.3 generator
+
 Building a laravel project comes from an idea. So why not to build the main idea behavior and leave the rest to Laragenerator in order to bootstrap your project. 
 This package helps you to focus more about your project idea. <b>DRY</b>.
 
@@ -49,7 +51,10 @@ The package extends Laravel Artisan and add `generate:app` command :
 Here's a quick example of how to bootstrap your laravel idea:
 
 ```bash
-php artisan generate:app --model=Article --controller=ArticlesController --schema="title:string, content:text, slug:string:unique, user_id:integer:foreign" --namespace=Backend
+php artisan generate:app \
+--model=Article --controller=ArticlesController \
+--schema="title:string, content:text, slug:string:unique, user_id:integer:foreign" \
+--namespace=Backend
 ```
 
 <table>
