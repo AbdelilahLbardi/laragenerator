@@ -2,6 +2,8 @@
 
 ## Laravel 5.3 generator
 
+<img src="https://media.giphy.com/media/26xBRzb0CQhNjwQRa/source.gif" alt="Laragenerator GIF"/>
+
 Building a laravel project comes from an idea. So why not to build the main idea behavior and leave the rest to Laragenerator in order to bootstrap your project. 
 This package helps you to focus more about your project idea. <b>DRY</b>.
 
