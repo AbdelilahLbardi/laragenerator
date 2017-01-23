@@ -156,4 +156,5 @@ This will add to your app a new folder called `Tempaltes` where you will find th
 
 ## Schema
 
-Since Laragenerator uses (Laracasts schema generator)[https://github.com/laracasts/Laravel-5-Generators-Extended#migrations-with-schema] to generate migration and schema you can find the its (documentation)[https://github.com/laracasts/Laravel-5-Generators-Extended#migrations-with-schema] to know more about what to fill in `--schema` option.
+<p>Since Laragenerator uses (Laracasts schema generator)[https://github.com/laracasts/Laravel-5-Generators-Extended] to generate migration and schema</p> 
+<p>you can find the its (documentation)[https://github.com/laracasts/Laravel-5-Generators-Extended] to know more about what to fill in `--schema` option. </p>
