@@ -15,7 +15,9 @@
     },
     "autoload": {
         "psr-4": {
-            "AbdelilahLbardi\\LaraGenerator\\": "src/"
+            "AbdelilahLbardi\\LaraGenerator\\": "src/",
+            "Laracasts\\Generators\\": "vendor/laracasts/generators/src/"
+
         }
     }
 }
