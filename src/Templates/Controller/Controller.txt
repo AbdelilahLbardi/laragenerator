@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\{{namespace}};
+namespace App\Http\Controllers{{namespace}};
 
 use App\Models\{{model}};
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+{{usesNamespace}}
 
 class {{controller}} extends Controller
 {
