@@ -25,7 +25,7 @@ First, pull in the package through Composer.
 
 ```
 "require": {
-    "abdelilahlbardi/laragenerator": "1.*"
+    "abdelilahlbardi/laragenerator": "2.*"
 }
 ```
 
@@ -39,59 +39,78 @@ After that, include the service provider within `config/app.php`.
 
 ```
 'providers' => [
-    Laracasts\Generators\GeneratorsServiceProvider::class,
     AbdelilahLbardi\LaraGenerator\Providers\LaraGeneratorServiceProvider::class,
 ];
 ```
 
-Note that Laragenerator use (schema generator)[https://github.com/laracasts/Laravel-5-Generators-Extended] of laracasts package to generate database migrations.
-
 ## Usage
 
-The package extends Laravel Artisan and add `generate:app` command :
+The package extends Laravel Artisan and add `generate:resources` command :
 
 Here's a quick example of how to bootstrap your laravel idea:
 
 ```bash
-php artisan generate:app \
---model=Article --controller=ArticlesController \
---schema="title:string, content:text, slug:string:unique, user_id:integer:foreign" \
---namespace=Backend
+php artisan generate:resources Backend/Article "titles:string content:text"
 ```
 
 <table>
 	<tr>
 		<td>Name</td>
+		<td>Type</td>
 		<td>Exemple</td>
 		<td>Usage</td>
 	</tr>
 	<tr>
 		<td>Model</td>
-		<td>--model=Article</td>
-		<td><b>Required</b></td>
-	</tr>
-	<tr>
-		<td>Controller</td>
-		<td>--controller=ArticlesController</td>
+		<td>Argument</td>
+		<td>Backend/Article</td>
 		<td><b>Required</b></td>
 	</tr>
 	<tr>
 		<td>Schema</td>
-		<td>--schema="title:string, content:text, user_id:integer:foreign"</td>
+		<td>Argument</td>
+		<td>"title:string, content:text, slug:string:unique, user_id:integer:foreign"</td>
 		<td><b>Required</b></td>
 	</tr>
 	<tr>
-		<td>Namespace</td>
-		<td>--namespace=Backend</td>
+		<td>Without controller</td>
+		<td>Option</td>
+		<td>--without-controller</td>
 		<td><b>Required</b></td>
+	</tr>
+	<tr>
+		<td>Without model</td>
+		<td>Option</td>
+		<td>--without-model</td>
+		<td>optional</td>
+	</tr>
+	<tr>
+		<td>Without views</td>
+		<td>Option</td>
+		<td>--without-views</td>
+		<td>optional</td>
+	</tr>
+	<tr>
+		<td>Without routes</td>
+		<td>Option</td>
+		<td>--without-routes</td>
+		<td>optional</td>
+	</tr>
+	<tr>
+		<td>Without migration</td>
+		<td>Option</td>
+		<td>--without-migration</td>
+		<td>optional</td>
 	</tr>
 	<tr>
 		<td>Use flash</td>
+		<td>Option</td>
 		<td>--use-flash</td>
 		<td>optional</td>
 	</tr>
 	<tr>
 		<td>Rollback</td>
+		<td>Option</td>
 		<td>--rollback</td>
 		<td>optional</td>
 	</tr>
@@ -99,20 +118,19 @@ php artisan generate:app \
 
 ## Examples
 
-- [Bootstrapping without flash](#bootstrapping-without-flash)
-- [Bootstrapping with flash](#bootstrapping-with-flash)
+- [Bootstrapping without flash](#Bootstrapping-with-all-the-resources)
+- [Bootstrapping with flash](#Bootstrapping-without-the-model)
 - [Delete the created files](#rollback)
 
 
-### Bootstrapping Without flash
+### Bootstrapping with all the resources
+
   ```bash
-php artisan generate:app --model=Article --controller=ArticlesController \
-                        --schema="title:string, content:text, slug:string:unique, user_id:integer:foreign" \
-                        --namespace=Backend
+php artisan generate:resources Article "title:string, content:text, slug:string:unique, user_id:integer:foreign"
 ```
 You will notice additional files and folders appear in your project :
 
- - `Controllers/Backend/AriclesController.php` : Here your generated controller inside the namespace that your specified.
+ - `Controllers/AriclesController.php` : Here your generated controller inside the namespace that your specified.
  - `app/Models/Aritlce` : New Models folder the your Models.
  - `resources/views/articles/index.blade.php` : index view which is empty.
  - `resources/views/articles/create.blade.php` : empty create view.
@@ -121,23 +139,27 @@ You will notice additional files and folders appear in your project :
  - `database/migrations/yyyy-mm-dd-create_articles_table.php` : Here your migration.
 
 
-### Bootstrapping With flash
+### Bootstrapping without the model
+
   ```bash
-php artisan generate:app --model=Article --controller=ArticlesController \
-                        --schema="title:string, content:text, slug:string:unique, user_id:integer:foreign" \
-                        --namespace=Backend --use-flash
+php artisan generate:resources Backed/Item "title:string, price:float, slug:string:unique, category_id:integer:foreign" --without-model
 ```
-This will generate the same files but won't comment the flash code line.
+This will generate the same files as the recent command but will no include :
+
+ - `Controllers/Backend/AriclesController.php` : Here your generated controller inside the namespace that your specified.
+ - `resources/views/backend/articles/index.blade.php` : index view which is empty.
+ - `resources/views/backend/articles/create.blade.php` : empty create view.
+ - `resources/views/backend/articles/edit.blade.php` : empty edit view.
+ - `routes/web/backend/articles.php` : Ready routes generated.
+ - `database/migrations/yyyy-mm-dd-create_articles_table.php` : Here your migration.
 
 ### Rollback
 
   ```bash
-php artisan generate:app --model=Article --controller=ArticlesController \
-                        --schema="title:string, content:text, slug:string:unique, user_id:integer:foreign" \
-                        --namespace=Backend --rollback
+php artisan generate:resources Frontend/User "name:string, email:string:unique" --rollback
 ```
-With the Laragenerator `--rollback` option you don't need to delete the generated folders manually. It does all the job for you.
-Notice that if you have more controllers this options doesn't delete all the controllers in the namespace.
+<p>With the Laragenerator `--rollback` option you don't need to delete the generated folders manually. It does all the job for you.</p>
+<p>Notice that if you have more controllers this options doesn't delete all the controllers in the namespace.</p>
 
 ## Templates publishing
 
