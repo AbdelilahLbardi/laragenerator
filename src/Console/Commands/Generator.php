@@ -4,6 +4,7 @@ namespace AbdelilahLbardi\LaraGenerator\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 
 class Generator extends Command
@@ -14,13 +15,16 @@ class Generator extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:app
+    protected $signature = 'generate:resources
+        {model}
+        {schema}
         {--rollback}
-        {--model=: Model}
-        {--controller=: Model Controller}
-        {--schema=: Migration Schema}
-        {--namespace=: Controller Namespace}
         {--use-flash}
+        {--without-model}
+        {--without-controller}
+        {--without-views}
+        {--without-routes}
+        {--without-migration}
     ';
 
     /**
@@ -47,13 +51,23 @@ class Generator extends Command
      */
     public function handle()
     {
-        $model = $this->option('model');
-        $schema = $this->option('schema');
-        $controller = $this->option('controller');
-        $namespace = $this->option('namespace');
-        $fillable = $this->schemaToFillable($schema);
+        $directories = explode('/', $this->argument('model'));
+        
+        $model = last($directories);
+        
+        array_pop($directories);
+
+        $namespace = implode('/', $directories);
+
+        $schema = $this->argument('schema');
+        
         $variable = strtolower($model);
+        
         $variables = str_plural($variable);
+        
+        $controller = ucfirst($variables) . 'Controller';
+        
+        $fillable = $this->schemaToFillable($schema);
 
         if(!$this->option('rollback'))
             return $this->build($model, $controller, $variable, $variables, $schema, $fillable, $namespace);
@@ -61,45 +75,130 @@ class Generator extends Command
         $this->destroy($controller, $model, $variables, $namespace);
     }
 
-    
 
+    /**
+     * Initiate the building of the Namespace, Controller, Model, Views, Routes and Migration.
+     *
+     * @param $model
+     * @param $controller
+     * @param $variable
+     * @param $variables
+     * @param $schema
+     * @param $fillable
+     * @param $namespace
+     */
     public function build($model, $controller, $variable, $variables, $schema, $fillable, $namespace)
     {
-        
-        $this->makeControllersNamespace($namespace);
-        $this->makeModelsNamespace();
+        $this->ControllerBlock($model, $controller, $variable, $variables, $fillable, $namespace);
 
-        $this->info('Controllers namespace created!');
+        $this->ModelBlock($model, $fillable);
 
-        $controllerContent = $this->getController($model, $controller, $variable, $variables, $fillable, $namespace);
-        $this->makeController($namespace, $controller, $controllerContent);
-        
-        $this->info($controller . ' created in ' . $namespace . ' namespace !');
+        $this->ViewsBlock($variables, $namespace);
 
-        $modelContent = $this->getModel($model, $fillable);
-        $this->makeModel($model, $modelContent);
-
-        $this->info($model . ' created in Models namespace !');
-
-        $viewsContent = $this->getViews();
-        $this->makeViews($variables, $viewsContent);
-        
-        $this->info($variables . ' views folder created!');
-
-        $this->makeRoutesFolder();
-        $routesContent = $this->getRoutes($variables, $controller, $namespace);
-        $this->makeRoutes($variables, $routesContent);
-
-        $this->info($variables . ' routes created!');
-
-        $this->call('make:migration:schema', [
-            'name' => 'create_' . $variables . '_table', '--schema' => $schema, '--model' => false
-        ]);
+        $this->MigrationBlock($variables, $schema);
     }
 
+
+    /*
+     * Generate Controller block
+     * */
+    public function ControllerBlock($model, $controller, $variable, $variables, $fillable, $namespace)
+    {
+        if (!$this->option('without-controller'))
+        {
+            if(!empty($namespace))
+                $this->makeControllersNamespace($namespace);
+
+            $controllerContent = $this->getController($model, $controller, $variable, $variables, $fillable, $namespace);
+
+            $this->makeController($namespace, $controller, $controllerContent);
+
+            return $this->info('Controller: [created]');
+        }
+        $this->info('Controller: [ignored]');
+    }
+
+    /*
+     * Generate Model block
+     * */
+    public function ModelBlock($model, $fillable)
+    {
+        if (!$this->option('without-model'))
+        {
+            $this->makeModelsNamespace();
+
+            $modelContent = $this->getModel($model, $fillable);
+
+            $this->makeModel($model, $modelContent);
+
+            return $this->info('Model: [created]');
+        }
+
+        $this->info('Model: [ignored]');
+    }
+
+    /*
+     * Generate Views Block
+     * */
+    public function ViewsBlock($variables, $namespace)
+    {
+        if(!$this->option('without-views'))
+        {
+            $viewsContent = $this->getViews();
+
+            $this->makeViews($variables, $viewsContent, $namespace);
+
+            return $this->info('Views: [create]');
+        }
+        $this->info('Views: ignored]');
+    }
+
+    /*
+     * Generate Routes Block
+     * */
+    public function RoutesBlock()
+    {
+        if (!$this->option('without-routes'))
+        {
+            $this->makeRoutesFolder($namespace);
+
+            $routesContent = $this->getRoutes($variables, $controller, $namespace);
+
+            $this->makeRoutes($variables, $routesContent, $namespace);
+
+            $this->info('Routes: [created]');
+        }
+        $this->info('Routes: [ignored]');
+    }
+
+    /*
+     * Generate the migration
+     * */
+    public function MigrationBlock($variables, $schema)
+    {
+        if (!$this->option('without-migration'))
+        {
+            $this->call('make:migration:schema', [
+                'name' => 'create_' . $variables . '_table', '--schema' => $schema, '--model' => false
+            ]);
+        }else{
+            $this->info('Migration: [ignored]');
+        }
+    }
+
+    /**
+     * Destroy the created resources
+     *
+     * @param $controller
+     * @param $model
+     * @param $variables
+     * @param $namespace
+     */
     public function destroy($controller, $model, $variables, $namespace)
     {
-        File::delete(base_path('routes/' . $variables . '.php'));
+        $namespace = ($namespace != "" ? $namespace . '/' : "");
+
+        File::delete(base_path('routes/' . $namespace . $variables . '.php'));
 
         $this->info('Routes Deleted!');
 
@@ -107,33 +206,58 @@ class Generator extends Command
 
         $this->info('Model Deleted!');
 
-        File::delete(app_path('Http/Controllers/'. $namespace. '/' . $controller . '.php'));
+        File::delete(app_path('Http/Controllers/'. $namespace. $controller . '.php'));
 
         $this->info('Controller Deleted!');
 
-        File::deleteDirectory(resource_path('views/' . $variables));
+        File::deleteDirectory(resource_path('views/' . $namespace. $variables));
 
         $this->info('Views folder deleted!');
     }
 
+    /**
+     * @param $model
+     * @param $controller
+     * @param $variable
+     * @param $variables
+     * @param $fillable
+     * @param $namespace
+     * @return mixed
+     */
     public function getController($model, $controller, $variable, $variables, $fillable, $namespace)
     {
+        $usesNamespace = ($namespace != "" ? 'use App\Http\Controllers\Controller;' : "");
+
+        $namespace = ($namespace != "" ? '\\' . str_replace('/', '\\', $namespace) : "");
+
         $template = File::get($this->path('Templates/Controller/Controller.txt'));
 
         $template = str_replace('{{//}}', ($this->option('use-flash') ? "" : "//"), $template);
 
         return str_replace(
-            ['{{model}}', '{{variables}}', '{{variable}}', '{{fillable}}', '{{controller}}', '{{namespace}}'], 
-            [$model, $variables, $variable, $fillable, $controller, $namespace], $template
+            ['{{model}}', '{{variables}}', '{{variable}}', '{{fillable}}', '{{controller}}', '{{namespace}}', '{{usesNamespace}}'], 
+            [$model, $variables, $variable, $fillable, $controller, $namespace, $usesNamespace], $template
         );
     }
 
+    /**
+     * @param $namespace
+     * @param $controller
+     * @param $controllerContent
+     */
     public function makeController($namespace, $controller, $controllerContent)
     {
-        File::put(app_path('Http/Controllers/' . $namespace . '/' . $controller . '.php'), $controllerContent);
+        $namespace = ($namespace != "" ? $namespace . '/' : "");
+
+        File::put(app_path('Http/Controllers/' . $namespace . $controller . '.php'), $controllerContent);
     }
 
 
+    /**
+     * @param $model
+     * @param $fillable
+     * @return mixed
+     */
     public function getModel($model, $fillable)
     {
         $template = File::get($this->path('Templates/Model/Model.txt'));
@@ -144,11 +268,18 @@ class Generator extends Command
         );
     }
 
+    /**
+     * @param $model
+     * @param $modelContent
+     */
     public function makeModel($model, $modelContent)
     {
         File::put(app_path('Models/' . $model . '.php'), $modelContent);
     }
 
+    /**
+     * @return array
+     */
     public function getViews()
     {
         return [
@@ -158,19 +289,34 @@ class Generator extends Command
         ];
     }
 
-    public function makeViews($variables, $views)
+    /**
+     * @param $variables
+     * @param $views
+     * @param $namespace
+     */
+    public function makeViews($variables, $views, $namespace)
     {
-        File::makeDirectory(resource_path('views/' . $variables));
+        $namespace = ($namespace != "" ? strtolower($namespace) . '/' : "");
+
+        File::makeDirectory(resource_path('views/' . $namespace . $variables), 0775, true);
 
         foreach ($views as $key => $value) 
-            File::put( resource_path('views/' . $variables . '/' . $key), $value);
+            File::put( resource_path('views/' . $namespace . $variables . '/' . $key), $value);
 
     }
 
 
+    /**
+     * @param $variables
+     * @param $controller
+     * @param $namespace
+     * @return mixed
+     */
     public function getRoutes($variables, $controller, $namespace)
     {
         $template = File::get($this->path('Templates/routes.txt'));
+
+        $namespace = ($namespace != "" ? "'namespace' => '" . str_replace('/', '\\', $namespace) . "'" : "");
 
         return str_replace(
             ['{{variables}}', '{{controller}}', '{{namespace}}'], 
@@ -178,28 +324,47 @@ class Generator extends Command
         );
     }
 
-    public function makeRoutesFolder()
+    /**
+     * @param $namespace
+     */
+    public function makeRoutesFolder($namespace)
     {
-        $path = base_path('routes/web');
+        $path = base_path('routes/web/' . strtolower($namespace));
         
         if (!File::isDirectory($path))
-            File::makeDirectory($path);
+            File::makeDirectory($path, 0775, true);
     }
 
-    public function makeRoutes($variables, $routesContent)
+    /**
+     * @param $variables
+     * @param $routesContent
+     * @param $namespace
+     */
+    public function makeRoutes($variables, $routesContent, $namespace)
     {
-        File::put( base_path('routes/web/' . $variables . '.php'), $routesContent);
+        $namespace = ($namespace != "" ? strtolower($namespace) . '/' : "");
+
+        File::put( base_path('routes/web/' . $namespace . $variables . '.php'), $routesContent);
     }
 
 
+    /**
+     * @param $namespace
+     */
     public function makeControllersNamespace($namespace)
     {
         $path = app_path('Http/Controllers/' . $namespace);
         
         if (!File::isDirectory($path))
-            File::makeDirectory($path);
+            {
+                File::makeDirectory($path, 0775, true);
+                Log::debug($path . ' is created');
+            }
     }
 
+    /**
+     * Make the Models namespace
+     */
     public function makeModelsNamespace()
     {
         $path = app_path('Models');
@@ -208,6 +373,12 @@ class Generator extends Command
             File::makeDirectory($path);
     }
 
+    /**
+     * Convert the schema argument to the fillable array
+     *
+     * @param $schema
+     * @return string
+     */
     public function schemaToFillable($schema)
     {
         $array = explode(',', $schema);
@@ -224,9 +395,14 @@ class Generator extends Command
         return $fillable;
     }
 
+    /**
+     * search if the Templates folder has been published or not
+     *
+     * @param $path
+     * @return string
+     */
     public function path($path)
     {
-
         if(File::exists(base_path($path)))
             return base_path($path);
 
