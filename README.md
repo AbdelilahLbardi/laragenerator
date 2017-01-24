@@ -74,7 +74,7 @@ php artisan generate:resources Backend/Article "titles:string content:text"
 		<td>Without controller</td>
 		<td>Option</td>
 		<td>--without-controller</td>
-		<td><b>Required</b></td>
+		<td>optional</td>
 	</tr>
 	<tr>
 		<td>Without model</td>
