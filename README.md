@@ -23,7 +23,7 @@ First, pull in the package through Composer.
 
 ```
 "require": {
-    "abdelilahlbardi/laragenerator": "2.*"
+    "abdelilahlbardi/laragenerator": "1.1"
 }
 ```
 
