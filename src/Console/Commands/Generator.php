@@ -15,16 +15,16 @@ class Generator extends Command
      *
      * @var string
      */
-    protected $signature = 'generate:resources
+    protected $signature = 'generate:resource
         {model}
-        {schema}
-        {--rollback}
-        {--use-flash}
+        {--S|schema=""}
+        {--R|rollback}
+        {--with-flash}
         {--without-model}
         {--without-controller}
         {--without-views}
-        {--without-routes}
         {--without-migration}
+        {--without-routes}
     ';
 
     /**
@@ -59,7 +59,7 @@ class Generator extends Command
 
         $namespace = implode('/', $directories);
 
-        $schema = $this->argument('schema');
+        $schema = $this->option('schema');
         
         $variable = strtolower($model);
         
@@ -95,9 +95,39 @@ class Generator extends Command
 
         $this->ViewsBlock($variables, $namespace);
 
+        $this->RoutesBlock($namespace, $variables, $controller);
+
         $this->MigrationBlock($variables, $schema);
     }
 
+    /**
+     * Destroy the created resources
+     *
+     * @param $controller
+     * @param $model
+     * @param $variables
+     * @param $namespace
+     */
+    public function destroy($controller, $model, $variables, $namespace)
+    {
+        $namespace = ($namespace != "" ? $namespace . '/' : "");
+
+        File::delete(base_path('routes/' . $namespace . $variables . '.php'));
+
+        $this->info('Routes Deleted!');
+
+        File::delete(app_path('Models/' . $model . '.php'));
+
+        $this->info('Model Deleted!');
+
+        File::delete(app_path('Http/Controllers/'. $namespace. $controller . '.php'));
+
+        $this->info('Controller Deleted!');
+
+        File::deleteDirectory(resource_path('views/' . $namespace. $variables));
+
+        $this->info('Views folder deleted!');
+    }
 
     /*
      * Generate Controller block
@@ -156,7 +186,7 @@ class Generator extends Command
     /*
      * Generate Routes Block
      * */
-    public function RoutesBlock()
+    public function RoutesBlock($namespace, $variables, $controller)
     {
         if (!$this->option('without-routes'))
         {
@@ -166,7 +196,7 @@ class Generator extends Command
 
             $this->makeRoutes($variables, $routesContent, $namespace);
 
-            $this->info('Routes: [created]');
+            return $this->info('Routes: [created]');
         }
         $this->info('Routes: [ignored]');
     }
@@ -178,41 +208,14 @@ class Generator extends Command
     {
         if (!$this->option('without-migration'))
         {
-            $this->call('make:migration:schema', [
+            $this->callSilent('make:migration:schema', [
                 'name' => 'create_' . $variables . '_table', '--schema' => $schema, '--model' => false
             ]);
+
+            return $this->info('Migration: [created]');
         }else{
             $this->info('Migration: [ignored]');
         }
-    }
-
-    /**
-     * Destroy the created resources
-     *
-     * @param $controller
-     * @param $model
-     * @param $variables
-     * @param $namespace
-     */
-    public function destroy($controller, $model, $variables, $namespace)
-    {
-        $namespace = ($namespace != "" ? $namespace . '/' : "");
-
-        File::delete(base_path('routes/' . $namespace . $variables . '.php'));
-
-        $this->info('Routes Deleted!');
-
-        File::delete(app_path('Models/' . $model . '.php'));
-
-        $this->info('Model Deleted!');
-
-        File::delete(app_path('Http/Controllers/'. $namespace. $controller . '.php'));
-
-        $this->info('Controller Deleted!');
-
-        File::deleteDirectory(resource_path('views/' . $namespace. $variables));
-
-        $this->info('Views folder deleted!');
     }
 
     /**
@@ -232,7 +235,7 @@ class Generator extends Command
 
         $template = File::get($this->path('Templates/Controller/Controller.txt'));
 
-        $template = str_replace('{{//}}', ($this->option('use-flash') ? "" : "//"), $template);
+        $template = str_replace('{{//}}', ($this->option('with-flash') ? "" : "//"), $template);
 
         return str_replace(
             ['{{model}}', '{{variables}}', '{{variable}}', '{{fillable}}', '{{controller}}', '{{namespace}}', '{{usesNamespace}}'], 
@@ -249,7 +252,12 @@ class Generator extends Command
     {
         $namespace = ($namespace != "" ? $namespace . '/' : "");
 
-        File::put(app_path('Http/Controllers/' . $namespace . $controller . '.php'), $controllerContent);
+        $path = app_path('Http/Controllers/' . $namespace . $controller . '.php');
+
+        if(File::exists($path))
+            return $this->error($path . ' Already exists !');
+
+        File::put($path, $controllerContent);
     }
 
 
@@ -274,7 +282,12 @@ class Generator extends Command
      */
     public function makeModel($model, $modelContent)
     {
-        File::put(app_path('Models/' . $model . '.php'), $modelContent);
+        $path = app_path('Models/' . $model . '.php');
+
+        if(File::exists($path))
+            return $this->error($path . ' Already exists !');
+
+        File::put($path, $modelContent);
     }
 
     /**
@@ -300,8 +313,18 @@ class Generator extends Command
 
         File::makeDirectory(resource_path('views/' . $namespace . $variables), 0775, true);
 
-        foreach ($views as $key => $value) 
+        foreach ($views as $key => $value) {
+
+            $path = app_path('Models/' . $model . '.php');
+
+            if(File::exists($path))
+            {
+                return $this->error(resource_path('views/' . $namespace . $variables . '/' . $key));
+                
+            }
+
             File::put( resource_path('views/' . $namespace . $variables . '/' . $key), $value);
+        }
 
     }
 
