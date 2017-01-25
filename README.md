@@ -116,8 +116,8 @@ php artisan generate:resources Backend/Article "titles:string content:text"
 
 ## Examples
 
-- [Bootstrapping without flash](#Bootstrapping-with-all-the-resources)
-- [Bootstrapping with flash](#Bootstrapping-without-the-model)
+- [Bootstrapping with all the resources](#Bootstrapping-with-all-the-resources)
+- [Bootstrapping without the model](#Bootstrapping-without-the-model)
 - [Delete the created files](#rollback)
 
 
