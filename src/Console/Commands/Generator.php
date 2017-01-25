@@ -315,15 +315,16 @@ class Generator extends Command
 
         foreach ($views as $key => $value) {
 
-            $path = app_path('Models/' . $model . '.php');
+            $path = resource_path('views/' . $namespace . $variables . '/' . $key);
 
             if(File::exists($path))
             {
-                return $this->error(resource_path('views/' . $namespace . $variables . '/' . $key));
-                
+                $this->error(resource_path('views/' . $namespace . $variables . '/' . $key));
+
+                continue;
             }
 
-            File::put( resource_path('views/' . $namespace . $variables . '/' . $key), $value);
+            File::put( $path, $value);
         }
 
     }
