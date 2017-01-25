@@ -23,7 +23,7 @@ First, pull in the package through Composer.
 
 ```
 "require": {
-    "abdelilahlbardi/laragenerator": "1.1"
+    "abdelilahlbardi/laragenerator": "1.2"
 }
 ```
 
@@ -66,9 +66,9 @@ php artisan generate:resources Backend/Article "titles:string content:text"
 	</tr>
 	<tr>
 		<td>Schema</td>
-		<td>Argument</td>
-		<td>"title:string, content:text, slug:string:unique, user_id:integer:foreign"</td>
-		<td><b>Required</b></td>
+		<td>Option</td>
+		<td>--schema="title:string, content:text, slug:string:unique"</td>
+		<td>optional</td>
 	</tr>
 	<tr>
 		<td>Without controller</td>
@@ -103,7 +103,7 @@ php artisan generate:resources Backend/Article "titles:string content:text"
 	<tr>
 		<td>Use flash</td>
 		<td>Option</td>
-		<td>--use-flash</td>
+		<td>--with-flash</td>
 		<td>optional</td>
 	</tr>
 	<tr>
@@ -118,6 +118,7 @@ php artisan generate:resources Backend/Article "titles:string content:text"
 
 - [Bootstrapping with all the resources](#bootstrapping-with-all-the-resources)
 - [Bootstrapping without the model](#bootstrapping-without-the-model)
+- [Bootstrapping with empty migration](#bootstrapping-with-empty-migration)
 - [Delete the created files](#rollback)
 
 
@@ -150,11 +151,56 @@ This will generate the same files as the recent command but will no include :
  - `resources/views/backend/articles/edit.blade.php` : empty edit view.
  - `routes/web/backend/articles.php` : Ready routes generated.
  - `database/migrations/yyyy-mm-dd-create_articles_table.php` : Here your migration.
+ 
+ ### Bootstrapping with empty migration
+
+Since `--schema` is an optional option, if you don't specify the `--schema` option, Laragenerator generate an empty model with a simple id and timestamps.
+
+To do so, here's a simple command.
+  ```bash
+php artisan generate:resources Backed/Item
+```
+
+The migration file looks like:
+
+  ````php
+  
+  use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateItemsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('items', function (Blueprint $table) {
+            $table->increments('id');
+            $table->('""');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('items');
+    }
+}
+  
+  ````
 
 ### Rollback
 
   ```bash
-php artisan generate:resources Frontend/User "name:string, email:string:unique" --rollback
+php artisan generate:resources Frontend/User --rollback
 ```
 <p>With the Laragenerator `--rollback` option you don't need to delete the generated folders manually. It does all the job for you.</p>
 <p>Notice that if you have more controllers this options doesn't delete all the controllers in the namespace.</p>
@@ -164,7 +210,7 @@ php artisan generate:resources Frontend/User "name:string, email:string:unique" 
 You may want to customize the templates like the following artisan command:
 
 ```bash
-php artisan endor:publish --tag=templates
+php artisan vendor:publish --tag=templates
 ```
 
 This will add to your app a new folder called `Tempaltes` where you will find the following files:
