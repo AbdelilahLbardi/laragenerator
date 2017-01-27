@@ -17,7 +17,7 @@ class {{controller}} extends Controller
     {
         ${{variables}} = {{model}}::orderBy('id', 'desc')->paginate(20);
 
-        return view('{{variables}}.index')->with(compact('{{variables}}'));
+        return view('{{viewNamespace}}{{variables}}.index')->with(compact('{{variables}}'));
     }
 
     /**
@@ -27,7 +27,7 @@ class {{controller}} extends Controller
      */
     public function create()
     {
-        return view('{{variables}}.create');
+        return view('{{viewNamespace}}{{variables}}.create');
     }
 
     /**
@@ -57,7 +57,7 @@ class {{controller}} extends Controller
     {
         ${{variable}} = {{model}}::findOrFail($id);
 
-        return view('{{variables}}.show')->with(compact('{{variable}}'));
+        return view('{{viewNamespace}}{{variables}}.show')->with(compact('{{variable}}'));
     }
 
     /**
@@ -70,7 +70,7 @@ class {{controller}} extends Controller
     {
         ${{variable}} = {{model}}::findOrFail($id);
 
-        return view('{{variables}}.edit')->with(compact('{{variable}}'));
+        return view('{{viewNamespace}}{{variables}}.edit')->with(compact('{{variable}}'));
     }
 
     /**
@@ -103,6 +103,6 @@ class {{controller}} extends Controller
 
         {{//}} flash('{{model}} deleted!', 'danger');
 
-        return redirect()->route('{{variable}}.index');
+        return redirect()->route('{{variables}}.index');
     }
 }
