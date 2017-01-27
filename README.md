@@ -48,7 +48,7 @@ The package extends Laravel Artisan and add `generate:resources` command :
 Here's a quick example of how to bootstrap your laravel idea:
 
 ```bash
-php artisan generate:resources Backend/Article "titles:string content:text"
+php artisan generate:resources Backend/Article "titles:string, content:text"
 ```
 
 <table>
