@@ -16,6 +16,6 @@ Route::group([ {{namespace}} ], function()
     
     Route::delete('/{{variables}}/delete/{id}', ['as' => '{{variables}}.delete', 'uses' => '{{controller}}@destroy']);
 
-}
+})
 
 ?>
