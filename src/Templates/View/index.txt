@@ -1,0 +1,19 @@
+<table border="1">
+	
+	<tr>
+
+{{header}}
+	</tr>
+
+	@foreach( ${{variables}} as $key => ${{variable}} )
+
+		<tr>
+
+{{content}}
+			<th><a href="{{ route('{{variables}}.edit', ${{variables}}->id) }}"> edit </a></th>
+			
+		</tr>
+
+	@endforeach
+	
+</table>
