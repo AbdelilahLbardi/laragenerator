@@ -1,0 +1,8 @@
+<form action="{{ route('{{variables}}.store') }}" method="POST">
+
+	{{ csrf_field() }}
+	
+{{inputs}}
+	<button>Create</button>
+
+</form>
