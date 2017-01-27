@@ -1,6 +1,6 @@
 # Laragenerator
 
-## Laravel 5.3 generator
+## Laravel 5.4 generator
 
 Building a laravel project comes from an idea. So why not to build the main idea behavior and leave the rest to Laragenerator in order to bootstrap your project. 
 This package helps you to focus more about your project idea. <b>DRY</b>.
@@ -23,7 +23,7 @@ First, pull in the package through Composer.
 
 ```
 "require": {
-    "abdelilahlbardi/laragenerator": "1.2"
+    "abdelilahlbardi/laragenerator": "1.3"
 }
 ```
 
@@ -165,7 +165,7 @@ The migration file looks like:
 
   ````php
   
-  use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateItemsTable extends Migration
@@ -179,7 +179,7 @@ class CreateItemsTable extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
-            $table->('""');
+            
             $table->timestamps();
         });
     }
@@ -218,8 +218,12 @@ This will add to your app a new folder called `Tempaltes` where you will find th
  - `Templates/Controller/Controller.txt` : Controllers Template.
  - `Templates/Model/Model.txt` : Models Template.
  - `Templates/View/index.txt` : Index View Template.
+ - `Templates/View/headerCell.txt` : HTML table element header row Template.
+ - `Templates/View/contentCell.txt` : HTML table element content rows Template.
  - `Templates/View/create.txt` : Create View Template.
+ - `Templates/View/createInput.txt` : Create form inputs View Template.
  - `Templates/View/edit.txt` : Edit View Template.
+ - `Templates/View/editInput.txt` : Edit form inputs View Template.
  - `Templates/routes.txt`: Routes File Tempalte.
 
 ## Schema
