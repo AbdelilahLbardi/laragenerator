@@ -40,7 +40,7 @@ trait CanGenerateRoute{
 
         return str_replace(
             ['{{variables}}', '{{controller}}', '{{namespace}}'], 
-            [$this->variables, $this->controller, $namespace], $template
+            [$this->variables, $this->controller, str_replace('\\', '', $namespace)], $template
         );
 	}
 
