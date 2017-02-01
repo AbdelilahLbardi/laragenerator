@@ -61,7 +61,6 @@ trait CanGenerateController{
         File::put($path, $content);
 
 		$this->info('Controller: [created]');
-
 	}
 
 
