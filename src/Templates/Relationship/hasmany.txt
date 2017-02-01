@@ -1,0 +1,7 @@
+public function {{variables}}
+	{
+		return $this->hasMany({{model}}::class);
+	}
+
+
+	

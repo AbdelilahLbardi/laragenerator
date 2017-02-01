@@ -1,0 +1,7 @@
+public function {{variable}}
+	{
+		return $this->belongsTo({{model}}::class);
+	}
+
+
+	

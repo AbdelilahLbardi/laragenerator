@@ -3,6 +3,7 @@
 namespace AbdelilahLbardi\LaraGenerator\Console\Renders;
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 trait CanGenerateModel{
 
@@ -36,9 +37,23 @@ trait CanGenerateModel{
 	{
 		$template = File::get($this->path('Templates/Model/Model.txt'));
 
+		$relations = "";
+
+		foreach ($this->relationship as $value) 
+			{
+				$key = trim(key($value));
+
+				$variables = $value[key($value)];
+
+				$relations.= str_replace(
+					['{{variable}}', '{{variables}}', '{{model}}'], 
+					[str_singular($variables), str_plural($variables), ucfirst(str_singular($variables))], 
+					File::get($this->path('Templates/Relationship/'. $key .'.txt')));
+			}
+
         return str_replace(
-            ['{{model}}', '{{fillable}}'], 
-            [$this->model, $this->fillable], $template
+            ['{{model}}', '{{fillable}}', '{{relationships}}'], 
+            [$this->model, $this->fillable, $relations], $template
         );
 	}
 

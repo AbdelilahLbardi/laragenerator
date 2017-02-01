@@ -31,6 +31,7 @@ class Generator extends Command
     private $namespace;
     private $viewNamespace;
     private $migrationSchema;
+    private $relationship;
 
 
     /**
@@ -48,6 +49,7 @@ class Generator extends Command
         {--without-views}
         {--without-migration}
         {--without-routes}
+        {--relations=empty}
     ';
 
     /**
@@ -83,7 +85,9 @@ class Generator extends Command
         $this->viewNamespace = ($this->namespace == "" ? "" : rtrim(strtolower($this->namespace), '/') . '.');
 
         $this->schema = trim($this->option('schema'));
-        
+
+        $this->relationship = $this->option('relations');
+
         $this->variable = trim(strtolower($this->model));
         
         $this->variables = trim(str_plural($this->variable));
@@ -96,6 +100,21 @@ class Generator extends Command
 
         if($this->schema != "empty")
             $this->migrationSchema = array_add($this->migrationSchema, '--schema', $this->schema);
+
+        if($this->relationship != "empty")
+        {
+            $relationsArray = explode(',', $this->relationship);
+
+            $this->relationship = [];
+
+            foreach ($relationsArray as $key => $value) 
+            {
+                $this->relationship[] = [
+                    explode(':', $value)[0] => explode(':', $value)[1]
+                ];
+            }
+        }
+
     }
 
     /**
