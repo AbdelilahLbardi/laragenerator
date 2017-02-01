@@ -9,7 +9,9 @@ The current features are :
 ````
 - Create Namespaces.
 - Create Controllers.
+- Create Form Requests.
 - Create Models.
+- Create Models Relationships.
 - Create Migrations.
 - Routes Files.
 - Views files and folder.
@@ -71,6 +73,12 @@ php artisan generate:resources Backend/Article "titles:string, content:text"
 		<td>optional</td>
 	</tr>
 	<tr>
+		<td>Relationships</td>
+		<td>Option</td>
+		<td>--relations="hasmany:tags, belongsto:user"</td>
+		<td>optional</td>
+	</tr>
+	<tr>
 		<td>Without controller</td>
 		<td>Option</td>
 		<td>--without-controller</td>
@@ -80,6 +88,12 @@ php artisan generate:resources Backend/Article "titles:string, content:text"
 		<td>Without model</td>
 		<td>Option</td>
 		<td>--without-model</td>
+		<td>optional</td>
+	</tr>
+	<tr>
+		<td>Without request</td>
+		<td>Option</td>
+		<td>--without-request</td>
 		<td>optional</td>
 	</tr>
 	<tr>
