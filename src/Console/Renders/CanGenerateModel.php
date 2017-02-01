@@ -3,7 +3,6 @@
 namespace AbdelilahLbardi\LaraGenerator\Console\Renders;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 
 trait CanGenerateModel{
 
