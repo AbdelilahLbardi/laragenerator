@@ -4,6 +4,7 @@ namespace AbdelilahLbardi\LaraGenerator\Console\Commands;
 
 use AbdelilahLbardi\LaraGenerator\Traits\Helpers;
 use AbdelilahLbardi\LaraGenerator\Console\Renders\CanGenerateController; 
+use AbdelilahLbardi\LaraGenerator\Console\Renders\CanGenerateRequest; 
 use AbdelilahLbardi\LaraGenerator\Console\Renders\CanGenerateModel; 
 use AbdelilahLbardi\LaraGenerator\Console\Renders\CanGenerateRoute; 
 use AbdelilahLbardi\LaraGenerator\Console\Renders\CanGenerateView;
@@ -17,6 +18,7 @@ class Generator extends Command
 
     use Helpers;
     use CanGenerateController; 
+    use CanGenerateRequest; 
     use CanGenerateModel; 
     use CanGenerateRoute; 
     use CanGenerateView;
@@ -42,14 +44,15 @@ class Generator extends Command
     protected $signature = 'generate:resource
         {model}
         {--S|schema=empty}
-        {--R|rollback}
+        {--relations=empty}
         {--with-flash}
         {--without-model}
         {--without-controller}
         {--without-views}
         {--without-migration}
         {--without-routes}
-        {--relations=empty}
+        {--without-request}
+        {--R|rollback}
     ';
 
     /**
@@ -140,6 +143,8 @@ class Generator extends Command
     public function build()
     {
         $this->controllerBlock();
+        
+        $this->requestBlock();
 
         $this->modelBlock();
 
@@ -166,6 +171,10 @@ class Generator extends Command
         File::delete(app_path('Http/Controllers/'. $this->namespace. $this->controller . '.php'));
 
         $this->info('Controller: [deleted]');
+
+        File::delete(app_path('Http/Requests/'. $this->namespace. str_plural($this->model) . 'Request.php'));
+
+        $this->info('Request: [deleted]');
 
         File::deleteDirectory(resource_path('views/' . $this->namespace. $this->variables));
 
