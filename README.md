@@ -51,7 +51,7 @@ The package extends Laravel Artisan and add `generate:resources` command :
 Here's a quick example of how to bootstrap your laravel idea:
 
 ```bash
-php artisan generate:resources Backend/Article "titles:string, content:text"
+php artisan generate:resource Backend/Article "titles:string, content:text"
 ```
 
 <table>
@@ -69,7 +69,7 @@ php artisan generate:resources Backend/Article "titles:string, content:text"
 	</tr>
 	<tr>
 		<td>Schema</td>
-		<td>Option</td>
+		<td>Argument</td>
 		<td>--schema="title:string, content:text, slug:string:unique"</td>
 		<td>optional</td>
 	</tr>
@@ -140,7 +140,7 @@ php artisan generate:resources Backend/Article "titles:string, content:text"
 ### Bootstrapping with all the resources
 
   ```bash
-php artisan generate:resources Article "title:string, content:text, slug:string:unique, user_id:integer:foreign"
+php artisan generate:resource Article "title:string, content:text, slug:string:unique, user_id:integer:foreign"
 ```
 You will notice additional files and folders appear in your project :
 
@@ -156,7 +156,7 @@ You will notice additional files and folders appear in your project :
 ### Bootstrapping without the model
 
   ```bash
-php artisan generate:resources Backed/Item "title:string, price:float, slug:string:unique, category_id:integer:foreign" --without-model
+php artisan generate:resource Backed/Item "title:string, price:float, slug:string:unique, category_id:integer:foreign" --without-model
 ```
 This will generate the same files as the recent command but will no include :
 
@@ -173,7 +173,7 @@ Since `--schema` is an optional option, if you don't specify the `--schema` opti
 
 To do so, here's a simple command.
   ```bash
-php artisan generate:resources Backed/Item
+php artisan generate:resource Backed/Item
 ```
 
 The migration file looks like:
@@ -215,7 +215,7 @@ class CreateItemsTable extends Migration
 ### Rollback
 
   ```bash
-php artisan generate:resources Frontend/User --rollback
+php artisan generate:resource Frontend/User --rollback
 ```
 <p>With the Laragenerator `--rollback` option you don't need to delete the generated folders manually. It does all the job for you.</p>
 <p>Notice that if you have more controllers this options doesn't delete all the controllers in the namespace.</p>
