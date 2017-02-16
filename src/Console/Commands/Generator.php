@@ -43,7 +43,7 @@ class Generator extends Command
      */
     protected $signature = 'generate:resource
         {model}
-        {--S|schema=empty}
+        {schema=empty}
         {--relations=empty}
         {--with-flash}
         {--without-model}
@@ -87,7 +87,7 @@ class Generator extends Command
 
         $this->viewNamespace = ($this->namespace == "" ? "" : rtrim(strtolower($this->namespace), '/') . '.');
 
-        $this->schema = trim($this->option('schema'));
+        $this->schema = trim($this->argument('schema'));
 
         $this->relationship = $this->option('relations');
 
@@ -116,6 +116,9 @@ class Generator extends Command
                     explode(':', $value)[0] => explode(':', $value)[1]
                 ];
             }
+        }else
+        {
+            $this->relationship = [];
         }
 
     }
