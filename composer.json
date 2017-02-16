@@ -11,7 +11,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "laracasts/generators": "dev-master as 1.1.4"
+        "laracasts/generators": "master@dev"
     },
     "autoload": {
         "psr-4": {
