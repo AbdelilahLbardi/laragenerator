@@ -1,0 +1,7 @@
+public function {{function}}
+	{
+		return $this->{{relation}}({{model}}::class);
+	}
+
+
+	
