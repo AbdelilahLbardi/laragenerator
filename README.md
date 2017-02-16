@@ -25,7 +25,8 @@ First, pull in the package through Composer.
 
 ```
 "require": {
-    "abdelilahlbardi/laragenerator": "1.4"
+    "laracasts/generators": "master@dev",
+    "abdelilahlbardi/laragenerator": "^1.5"
 }
 ```
 
