@@ -9,7 +9,7 @@
             "email": "lbardi.abdelilah@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "laracasts/generators": "master@dev"
     },
