@@ -5,16 +5,16 @@
 	{{ csrf_field() }}
 	
 {{inputs}}
-	<button>Edit</button>
+	<input type="submit" value="Edit"/>
 
-	<button type="button" href="{{ route('{{variables}}.delete') . '/' . ${{variable}}->id }}" 
+	<button type="button" href="{{ route('{{variables}}.delete', ${{variable}}->id) }}" 
 	onclick="event.preventDefault();document.getElementById('delete').submit();">
 		Delete
 	</button>
 
 </form>
 
-<form id="delete" action="{{ route('{{variables}}.delete') . '/' . ${{variable}}->id }}" method="POST" style="display: none;">
+<form id="delete" action="{{ route('{{variables}}.delete', ${{variable}}->id) }}" method="POST" style="display: none;">
 	
 	<input name="_method" type="hidden" value="DELETE">
 	

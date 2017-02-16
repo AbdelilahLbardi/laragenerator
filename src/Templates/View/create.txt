@@ -3,6 +3,6 @@
 	{{ csrf_field() }}
 	
 {{inputs}}
-	<button>Create</button>
+	<input type="submit" value="Create"/>
 
 </form>
