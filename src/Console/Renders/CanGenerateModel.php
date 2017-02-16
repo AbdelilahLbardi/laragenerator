@@ -39,16 +39,16 @@ trait CanGenerateModel{
 		$relations = "";
 
 		foreach ($this->relationship as $value) 
-			{
-				$key = trim(key($value));
+		{
+			$key = trim(key($value));
 
-				$variables = $value[key($value)];
+			$variables = $value[key($value)];
 
-				$relations.= str_replace(
-					['{{variable}}', '{{variables}}', '{{model}}'], 
-					[str_singular($variables), str_plural($variables), ucfirst(str_singular($variables))], 
-					File::get($this->path('Templates/Relationship/'. $key .'.txt')));
-			}
+			$relations.= str_replace(
+				['{{function}}', '{{relation}}', '{{model}}'], 
+				[$variables, $key, ucfirst(str_singular($variables))], 
+				File::get($this->path('Templates/Model/relation.txt')));
+		}
 
         return str_replace(
             ['{{model}}', '{{fillable}}', '{{relationships}}'], 
