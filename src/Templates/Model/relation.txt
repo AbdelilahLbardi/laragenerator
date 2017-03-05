@@ -1,4 +1,4 @@
-public function {{function}}
+public function {{function}}()
 	{
 		return $this->{{relation}}({{model}}::class);
 	}
