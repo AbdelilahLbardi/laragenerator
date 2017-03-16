@@ -10,7 +10,7 @@
 		<tr>
 
 {{content}}
-			<th><a href="{{ route('{{variables}}.edit', ${{variables}}->id) }}"> edit </a></th>
+			<th><a href="{{ route('{{variables}}.edit', ${{variable}}->id) }}"> edit </a></th>
 			
 		</tr>
 
