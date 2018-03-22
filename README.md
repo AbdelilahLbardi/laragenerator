@@ -5,7 +5,7 @@
 Building a laravel project comes from an idea. So why not to build the main idea behavior and leave the rest to Laragenerator in order to bootstrap your project. 
 This package helps you to focus more about your project idea. <b>DRY</b>.
 
-The current features are :
+The current features help you to :
 ````
 - Create Namespaces.
 - Create Controllers.
@@ -13,8 +13,8 @@ The current features are :
 - Create Models.
 - Create Models Relationships.
 - Create Migrations.
-- Routes Files.
-- Views files and folder.
+- Create Routes Files.
+- Create Views files.
 ````
 
 If you have any suggestions please let me know : https://github.com/AbdelilahLbardi/Laragenerator/pulls.
@@ -46,7 +46,7 @@ After that, include the service provider within `config/app.php`.
 
 ## Usage
 
-The package extends Laravel Artisan and add `generate:resources` command :
+The package extends Laravel Artisan and add `generate:resource` command :
 
 Here's a quick example of how to bootstrap your laravel idea:
 
@@ -142,10 +142,10 @@ php artisan generate:resource Backend/Article "titles:string, content:text"
   ```bash
 php artisan generate:resource Article "title:string, content:text, slug:string:unique, user_id:integer:foreign"
 ```
-You will notice additional files and folders appear in your project :
+You will notice additional files and folders appearing in your project :
 
- - `Controllers/AriclesController.php` : Here your generated controller inside the namespace that your specified.
- - `app/Models/Aritlce` : New Models folder the your Models.
+ - `Controllers/ArticlesController.php` : Here your generated controller inside the namespace that you specified.
+ - `app/Models/Article` : New Models folder the your Models.
  - `resources/views/articles/index.blade.php` : index view which is empty.
  - `resources/views/articles/create.blade.php` : empty create view.
  - `resources/views/articles/edit.blade.php` : empty edit view.
@@ -160,23 +160,23 @@ php artisan generate:resource Backed/Item "title:string, price:float, slug:strin
 ```
 This will generate the same files as the recent command but will no include :
 
- - `Controllers/Backend/AriclesController.php` : Here your generated controller inside the namespace that your specified.
- - `resources/views/backend/articles/index.blade.php` : index view which is empty.
- - `resources/views/backend/articles/create.blade.php` : empty create view.
- - `resources/views/backend/articles/edit.blade.php` : empty edit view.
- - `routes/web/backend/articles.php` : Ready routes generated.
- - `database/migrations/yyyy-mm-dd-create_articles_table.php` : Here your migration.
+ - `Controllers/Backend/ItemsController.php` : Here your generated controller inside the namespace that your specified.
+ - `resources/views/backend/items/index.blade.php` : index view which is empty.
+ - `resources/views/backend/items/create.blade.php` : empty create view.
+ - `resources/views/backend/items/edit.blade.php` : empty edit view.
+ - `routes/web/backend/items.php` : Ready routes generated.
+ - `database/migrations/yyyy-mm-dd-create_items_table.php` : Here your migration.
  
  ### Bootstrapping with empty migration
 
-Since `--schema` is an optional option, if you don't specify the `--schema` option, Laragenerator generate an empty model with a simple id and timestamps.
+Since `--schema` is an optional option, if you don't specify the `--schema` option, Laragenerator generates an empty model with a simple id and timestamps.
 
 To do so, here's a simple command.
   ```bash
 php artisan generate:resource Backed/Item
 ```
 
-The migration file looks like:
+The migration file will look like:
 
   ````php
   
@@ -217,7 +217,7 @@ class CreateItemsTable extends Migration
   ```bash
 php artisan generate:resource Frontend/User --rollback
 ```
-<p>With the Laragenerator `--rollback` option you don't need to delete the generated folders manually. It does all the job for you.</p>
+<p>With the Laragenerator `--rollback` option, you don't need to delete the generated folders manually. It does all the job for you.</p>
 <p>Notice that if you have more controllers this options doesn't delete all the controllers in the namespace.</p>
 
 ## Templates publishing
@@ -228,7 +228,7 @@ You may want to customize the templates like the following artisan command:
 php artisan vendor:publish --tag=templates
 ```
 
-This will add to your app a new folder called `Tempaltes` where you will find the following files:
+This will add a new folder to your app called `Tempaltes` where you will find the following files:
 
  - `Templates/Controller/Controller.txt` : Controllers Template.
  - `Templates/Model/Model.txt` : Models Template.
@@ -244,4 +244,4 @@ This will add to your app a new folder called `Tempaltes` where you will find th
 ## Schema
 
 <p>Since Laragenerator uses https://github.com/laracasts/Laravel-5-Generators-Extended to generate migration and schema</p> 
-<p>you can find the its documentation here: https://github.com/laracasts/Laravel-5-Generators-Extended to know more about what to fill in `--schema` option. </p>
+<p>you can find the related documentation here: https://github.com/laracasts/Laravel-5-Generators-Extended. </p>
